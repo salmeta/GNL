@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+.././libft/libft.h
+string.h
+-
+ctype.h
+-
+stdlib.h
+-
+strings.h
+-
+unistd.h
+-
+
+/Users/salmeta/Documents/GNL/get_next_line.h
+unistd.h
+-
+libft/libft.h
+-
+
+/Users/salmeta/Documents/GNL/main.c
+get_next_line.h
+/Users/salmeta/Documents/GNL/get_next_line.h
+fcntl.h
+-
+stdio.h
+-
+
