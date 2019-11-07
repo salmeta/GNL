@@ -43,7 +43,7 @@ static char	*gnl_strndup(const char *s1, size_t n)
 	return (s2);
 }
 
-static char	*gnl_strjoin(char **s1, char const *s2)
+static char	*gnl_strnjoin(char **s1, char const *s2)
 {
 	int		sum;
 	char	*str;
@@ -58,6 +58,27 @@ static char	*gnl_strjoin(char **s1, char const *s2)
 	return (ft_strcat(str, s2));
 }
 
+static char	*gnl_strchr(const char *s1, int c)
+{
+	int i;
+	int j = 0;
+	char *s2 = NULL;
+
+	i = 0;
+	while (s1[i] && s1[i] != c)
+		i++;
+	if (s1[i] == c)
+	{
+		s2 = (char*)malloc(ft_strlen(&s1[i]) + 1);
+		while (s1[i])
+			s2[j++] = s1[i++];
+		s2[j] = '\0';
+		return s2;
+		//return ((char *) &s1[i]);
+	}
+	return (NULL);
+}
+
 int	get_next_line(const int fd, char **line)
 {
 	int			res;
@@ -65,23 +86,23 @@ int	get_next_line(const int fd, char **line)
 	char        *tmp;
 	static char	*str = NULL;
 
-	if (fd < 0 || !line ||  BUFF_SIZE < 1)
-		return (-1);
-
-	if (!(buf = ft_strnew(BUFF_SIZE)))
+	if (fd < 0 || !line || BUFF_SIZE < 1 || (!(buf = ft_strnew(BUFF_SIZE))))
 		return (-1);
 	if (!str)
 		str = ft_memalloc(BUFF_SIZE);
-	while (!(tmp = ft_strchr(str, '\n')))
+	while (!(tmp = gnl_strchr(str, '\n'))) //(!(tmp = ft_strchr(str, '\n')))
 	{
 		if ((res = read(fd, buf, BUFF_SIZE)) < 1)
 			return (check_end_of_doc(line, &str, res, &buf));
 		buf[res] = '\0';
-		if (!(str = gnl_strjoin(&str, buf)))
+		if (!(str = gnl_strnjoin(&str, buf)))
 			return (-1);
 	}
 	*line = gnl_strndup(str, tmp - str);
+
+	//ft_strncpy(str, tmp + 1, BUFF_SIZE); утечек нет, есть ошибки в тестах
 	str = gnl_strndup(tmp + 1, BUFF_SIZE);
 	ft_strdel(&buf);
+	ft_strdel(&tmp);
 	return (1);
 }
